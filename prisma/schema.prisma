@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Vehicle {
+  id            String           @id @default(uuid())
+  make          String
+  model         String
+  variant       String?
+  year          Int
+  price         Float
+  salePrice     Float?
+  mileage       Int
+  fuelType      String
+  transmission  String
+  engine        String?
+  engineSize    String?
+  power         String?
+  drivetrain    String?
+  bodyType      String
+  doors         Int?             @default(5)
+  seats         Int?             @default(5)
+  exteriorColor String?
+  interiorColor String?
+  registration  String?
+  vin           String?
+  stockNumber   String           @unique
+  description   String
+  status        String           @default("published") // published, draft, reserved, sold
+  featured      Boolean          @default(false)
+  slug          String           @unique
+  location      String           @default("Auckland Showroom")
+  condition     String           @default("Pre-Owned")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  images        VehicleImage[]
+  features      VehicleFeature[]
+  enquiries     Enquiry[]
+  testDrives    TestDrive[]
+  financeApps   FinanceApplication[]
+
+  @@index([status, featured])
+  @@index([make])
+  @@index([price])
+  @@index([year])
+  @@index([slug])
+  @@index([createdAt])
+}
+
+model VehicleImage {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int      @default(0)
+  isPrimary Boolean  @default(false)
+
+  @@index([vehicleId, sortOrder])
+}
+
+model VehicleFeature {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  name      String
+
+  @@index([vehicleId])
+}
+
+model Enquiry {
+  id               String   @id @default(uuid())
+  vehicleId        String?
+  vehicle          Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  customerName     String
+  email            String
+  phone            String
+  message          String
+  preferredContact String   @default("phone")
+  status           String   @default("new") // new, contacted, follow-up, converted, closed
+  createdAt        DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TestDrive {
+  id           String   @id @default(uuid())
+  vehicleId    String?
+  vehicle      Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  customerName String
+  email        String
+  phone        String
+  date         String
+  time         String
+  message      String?
+  status       String   @default("requested") // requested, confirmed, completed, cancelled
+  createdAt    DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TradeIn {
+  id            String   @id @default(uuid())
+  customerName  String
+  email         String
+  phone         String
+  make          String
+  model         String
+  year          Int
+  mileage       Int
+  registration  String?
+  condition     String
+  expectedPrice Float?
+  message       String?
+  photos        String?
+  status        String   @default("pending") // pending, reviewing, appraised, completed, rejected
+  createdAt     DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model FinanceApplication {
+  id               String   @id @default(uuid())
+  vehicleId        String?
+  vehicle          Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  customerName     String
+  email            String
+  phone            String
+  vehiclePrice     Float
+  deposit          Float
+  loanTerm         Int
+  interestRate     Float
+  estimatedMonthly Float
+  employmentStatus String?
+  annualIncome     Float?
+  status           String   @default("pending") // pending, review, approved, declined
+  createdAt        DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Setting {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String
+}
