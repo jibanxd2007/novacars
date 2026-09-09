@@ -3,8 +3,8 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { isCloudinaryConfigured, uploadToCloudinary } from '@/lib/cloudinary';
 
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/jpg'];
+const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,16 +15,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+    if (!ALLOWED_MIME_TYPES.includes(file.type.toLowerCase())) {
       return NextResponse.json(
-        { error: 'Invalid file format. Please upload JPEG, PNG, or WebP images.' },
+        { error: 'Invalid file format. Please upload JPG, PNG, or WebP images.' },
         { status: 400 }
       );
     }
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: 'File size exceeds maximum allowed limit (10MB).' },
+        { error: 'File size exceeds maximum limit of 15MB.' },
         { status: 400 }
       );
     }
@@ -32,36 +32,54 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // 1. If Cloudinary is configured, upload to Cloudinary CDN
+    // 1. If Cloudinary is configured in environment, upload to Cloudinary CDN
     if (isCloudinaryConfigured) {
-      const uploadResult = await uploadToCloudinary(buffer);
-      if (uploadResult) {
-        return NextResponse.json({
-          url: uploadResult.url,
-          publicId: uploadResult.publicId,
-          success: true,
-          provider: 'cloudinary',
-        });
+      try {
+        const uploadResult = await uploadToCloudinary(buffer);
+        if (uploadResult) {
+          return NextResponse.json({
+            url: uploadResult.url,
+            publicId: uploadResult.publicId,
+            success: true,
+            provider: 'cloudinary',
+          });
+        }
+      } catch (cloudErr) {
+        console.warn('Cloudinary upload warning:', cloudErr);
       }
     }
 
-    // 2. Fallback to local storage (for local development or self-hosted)
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadsDir, { recursive: true });
+    // 2. Try writing to local disk (works in local dev environment)
+    try {
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+      await mkdir(uploadsDir, { recursive: true });
 
-    const ext = path.extname(file.name) || '.jpg';
-    const cleanName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, '');
-    const filename = `${Date.now()}-${cleanName || 'image'}${ext}`;
-    const filePath = path.join(uploadsDir, filename);
+      const ext = path.extname(file.name) || '.jpg';
+      const cleanName = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, '');
+      const filename = `${Date.now()}-${cleanName || 'vehicle'}${ext}`;
+      const filePath = path.join(uploadsDir, filename);
 
-    await writeFile(filePath, buffer);
-    const publicUrl = `/uploads/${filename}`;
+      await writeFile(filePath, buffer);
+      const publicUrl = `/uploads/${filename}`;
 
-    return NextResponse.json({
-      url: publicUrl,
-      success: true,
-      provider: 'local',
-    });
+      return NextResponse.json({
+        url: publicUrl,
+        success: true,
+        provider: 'local',
+      });
+    } catch (fsErr) {
+      // 3. Fallback for serverless (Vercel read-only filesystem):
+      // Convert to optimized Data URL and return immediately
+      console.log('Read-only filesystem detected on serverless. Returning Data URL fallback.');
+      const base64 = buffer.toString('base64');
+      const dataUrl = `data:${file.type};base64,${base64}`;
+
+      return NextResponse.json({
+        url: dataUrl,
+        success: true,
+        provider: 'data-url',
+      });
+    }
   } catch (error: any) {
     console.error('File upload error:', error);
     return NextResponse.json(

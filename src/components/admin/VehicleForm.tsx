@@ -111,26 +111,53 @@ export default function VehicleForm({ initialData, isEdit = false }: VehicleForm
     if (!fileList || fileList.length === 0) return;
 
     setUploading(true);
+    setError('');
     try {
       for (let i = 0; i < fileList.length; i++) {
-        const formData = new FormData();
-        formData.append('file', fileList[i]);
-        const res = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.url) {
+        const file = fileList[i];
+        let uploadedUrl: string | null = null;
+
+        // 1. Try server upload API first
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await res.json();
+          if (res.ok && data.url) {
+            uploadedUrl = data.url;
+          } else if (data.error) {
+            console.warn('Server upload notice:', data.error);
+          }
+        } catch (apiErr) {
+          console.warn('Upload API network error, falling back to client reader:', apiErr);
+        }
+
+        // 2. If server upload failed, read image directly as data URL
+        if (!uploadedUrl) {
+          uploadedUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        }
+
+        if (uploadedUrl) {
           setImages((prev) => [
             ...prev,
-            { url: data.url, isPrimary: prev.length === 0, alt: `${make} ${model}` },
+            { url: uploadedUrl!, isPrimary: prev.length === 0, alt: `${make || 'Vehicle'} ${model || ''}`.trim() },
           ]);
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Image upload failed:', err);
+      setError('Could not process image: ' + (err.message || 'Unknown error'));
     } finally {
       setUploading(false);
+      e.target.value = '';
     }
   };
 
