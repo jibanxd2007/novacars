@@ -20,9 +20,20 @@ export default function Footer() {
             <p className="text-xs text-zinc-400 font-light max-w-sm leading-relaxed">
               Find your next drive. A curated collection of verified luxury European and performance motor vehicles.
             </p>
-            <p className="text-[11px] text-zinc-500 font-mono">
-              104 Great North Road, Grey Lynn, Auckland
-            </p>
+            <div className="pt-1 space-y-1.5">
+              <p className="text-[11px] text-zinc-500 font-mono">
+                104 Great North Road, Grey Lynn, Auckland
+              </p>
+              <p className="text-xs font-mono">
+                <span className="text-zinc-500">Contact: </span>
+                <a
+                  href="mailto:support@novaauto.co.nz"
+                  className="text-zinc-300 hover:text-[#f4d410] font-semibold transition-colors"
+                >
+                  SUPPORT@NOVAAUTO.CO.NZ
+                </a>
+              </p>
+            </div>
           </div>
 
           {/* Quick Links */}

@@ -125,6 +125,9 @@ export default function TradeInPage() {
               <h3 className="text-xl font-light text-white font-['Outfit'] mt-1">
                 Enter Details
               </h3>
+              <p className="text-[11px] text-zinc-400 mt-1">
+                Submissions are sent directly to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+              </p>
             </div>
 
             {submitted ? (
@@ -132,12 +135,12 @@ export default function TradeInPage() {
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
                 <h4 className="text-lg font-bold text-white">Appraisal Request Submitted</h4>
                 <p className="text-xs text-zinc-400 font-light">
-                  Thank you, {customerName}. Our valuation director will contact you via {phone} shortly.
+                  Thank you, {customerName}. Your appraisal request has been forwarded to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our valuation director will contact you via {phone} shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
                       Your Name *
@@ -148,6 +151,19 @@ export default function TradeInPage() {
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Full name"
+                      className="w-full bg-[#141419] border border-white/[0.08] rounded-lg p-2.5 text-xs text-white focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="e.g. alex@example.com"
                       className="w-full bg-[#141419] border border-white/[0.08] rounded-lg p-2.5 text-xs text-white focus:outline-none"
                     />
                   </div>
@@ -285,6 +301,13 @@ export default function TradeInPage() {
                 >
                   {submitting ? 'Submitting...' : 'Request Valuation →'}
                 </button>
+
+                <p className="text-center text-[11px] text-zinc-500 pt-1">
+                  Have appraisal questions? Email us directly at{' '}
+                  <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                    SUPPORT@NOVAAUTO.CO.NZ
+                  </a>
+                </p>
               </form>
             )}
           </div>

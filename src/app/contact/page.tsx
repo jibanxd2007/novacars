@@ -95,8 +95,8 @@ export default function ContactPage() {
                     <span className="text-[11px] text-zinc-500 uppercase font-bold block">
                       Email Inquiries
                     </span>
-                    <a href="mailto:concierge@novacars.co.nz" className="text-white font-semibold hover:text-[#f4d410]">
-                      concierge@novacars.co.nz
+                    <a href="mailto:support@novaauto.co.nz" className="text-white font-semibold hover:text-[#f4d410] text-sm break-all">
+                      SUPPORT@NOVAAUTO.CO.NZ
                     </a>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function ContactPage() {
                 Send a Message to Our Concierge
               </h3>
               <p className="text-xs text-zinc-400 mt-1">
-                We prioritize prompt service and respond to all digital inquiries within 60 minutes.
+                All digital inquiries are routed directly to <strong className="text-white font-mono">SUPPORT@NOVAAUTO.CO.NZ</strong> and our dealer management desk. We respond within 60 minutes.
               </p>
             </div>
 
@@ -201,7 +201,7 @@ export default function ContactPage() {
                   Message Transmitted!
                 </h4>
                 <p className="text-xs text-zinc-300 max-w-md mx-auto">
-                  Thank you, {name}. Your inquiry has been forwarded directly to our dealership general manager. We will be in touch shortly.
+                  Thank you, {name}. Your inquiry details have been forwarded to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong> and logged in our management portal. We will be in touch shortly.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}

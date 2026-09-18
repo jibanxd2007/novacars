@@ -7,11 +7,11 @@ async function main() {
 
   // 1. Create Default Admin User
   await prisma.user.upsert({
-    where: { email: 'admin@novacars.com' },
+    where: { email: 'support@novaauto.co.nz' },
     update: {},
     create: {
-      name: 'Nova Concierge Admin',
-      email: 'admin@novacars.com',
+      name: 'Nova Auto Support Admin',
+      email: 'support@novaauto.co.nz',
       password: 'admin', // Simple default demo password
       role: 'admin',
     },
@@ -24,7 +24,7 @@ async function main() {
     { key: 'hero_title', value: 'Drive Your Next Chapter' },
     { key: 'hero_subtitle', value: 'Premium cars. Verified quality. Unmatched service. Your dream ride is just a click away.' },
     { key: 'phone', value: '+64 9 888 4321' },
-    { key: 'email', value: 'concierge@novacars.co.nz' },
+    { key: 'email', value: 'support@novaauto.co.nz' },
     { key: 'whatsapp', value: '+64218884321' },
     { key: 'address', value: '104 Great North Road, Ponsonby, Auckland 1021' },
     { key: 'opening_hours', value: 'Mon - Fri: 8:30 AM – 6:00 PM | Sat: 9:00 AM – 5:00 PM | Sun: By Appointment' },

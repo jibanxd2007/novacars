@@ -563,7 +563,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
               Direct Showroom Inquiry
             </h2>
             <p className="text-xs text-zinc-400 font-light mt-1">
-              Our client specialist will respond with the full vehicle dossier within 60 minutes.
+              Inquiries are dispatched directly to <a href="mailto:support@novaauto.co.nz" className="text-[#f4d410] font-medium hover:underline">SUPPORT@NOVAAUTO.CO.NZ</a>. Our client specialist will respond within 60 minutes.
             </p>
           </div>
 
@@ -573,7 +573,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h4 className="text-lg font-bold text-white font-['Outfit']">Enquiry Received</h4>
                 <p className="text-xs text-zinc-400 font-light">
-                  Thank you, {enquiryName}. Our concierge will be in touch shortly.
+                  Thank you, {enquiryName}. Your details have been sent to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our concierge will be in touch shortly.
                 </p>
               </div>
             ) : (
@@ -641,6 +641,13 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 >
                   <span>{enquiryLoading ? 'Sending...' : 'Send Enquiry →'}</span>
                 </button>
+
+                <p className="text-center text-[11px] text-zinc-500 pt-1">
+                  Or write to us directly at{' '}
+                  <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                    SUPPORT@NOVAAUTO.CO.NZ
+                  </a>
+                </p>
               </form>
             )}
           </div>
@@ -720,7 +727,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h3 className="text-lg font-bold text-white font-['Outfit']">Test Drive Booked</h3>
                 <p className="text-xs text-zinc-400">
-                  We look forward to hosting you for the {vehicle.year} {vehicle.make} {vehicle.model}.
+                  We look forward to hosting you for the {vehicle.year} {vehicle.make} {vehicle.model}. Request dispatched to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>.
                 </p>
                 <button
                   onClick={() => {
@@ -741,6 +748,9 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                   <h3 className="text-xl font-light text-white font-['Outfit'] mt-0.5">
                     Schedule Test Drive
                   </h3>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Requests are routed immediately to <strong className="text-zinc-200">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+                  </p>
                 </div>
 
                 <div>

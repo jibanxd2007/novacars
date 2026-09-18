@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { sendInquiryNotification } from '@/lib/mail';
 
 export async function GET() {
   try {
@@ -72,6 +73,23 @@ export async function POST(request: NextRequest) {
         status: 'pending',
       },
     });
+
+    // Dispatch email notification to support@novaauto.co.nz
+    sendInquiryNotification({
+      type: 'Trade-In Valuation',
+      customerName: tradeIn.customerName,
+      customerEmail: tradeIn.email,
+      customerPhone: tradeIn.phone,
+      message: tradeIn.message,
+      extraDetails: {
+        'Trade Vehicle': `${tradeIn.year} ${tradeIn.make} ${tradeIn.model}`,
+        'Mileage': `${tradeIn.mileage.toLocaleString()} km`,
+        'License Plate': tradeIn.registration || 'N/A',
+        'Condition': tradeIn.condition,
+        'Expected Valuation': tradeIn.expectedPrice ? `$${tradeIn.expectedPrice.toLocaleString()}` : 'Market appraisal',
+        'Photos Attached': tradeIn.photos || 'None',
+      },
+    }).catch((e) => console.error('Failed to dispatch trade-in notification:', e));
 
     return NextResponse.json(tradeIn, { status: 201 });
   } catch (error: any) {

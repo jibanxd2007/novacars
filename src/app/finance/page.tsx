@@ -197,6 +197,9 @@ function FinanceContent() {
             <h2 className="text-2xl font-light text-white font-['Outfit'] mt-1">
               Apply in Under 2 Minutes
             </h2>
+            <p className="text-[11px] text-zinc-400 mt-1">
+              Applications are reviewed securely and sent directly to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+            </p>
           </div>
 
           {applied ? (
@@ -204,7 +207,7 @@ function FinanceContent() {
               <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
               <h3 className="text-lg font-bold text-white">Application Received</h3>
               <p className="text-xs text-zinc-400 font-light">
-                Our finance director will review your pre-qualification and reach out shortly.
+                Application logged and dispatched to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our finance director will review your pre-qualification and reach out shortly.
               </p>
             </div>
           ) : (
@@ -274,6 +277,13 @@ function FinanceContent() {
               >
                 {loading ? 'Processing...' : 'Submit Application →'}
               </button>
+
+              <p className="text-center text-[11px] text-zinc-500 pt-1">
+                Prefer bespoke terms or direct assistance? Contact{' '}
+                <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                  SUPPORT@NOVAAUTO.CO.NZ
+                </a>
+              </p>
             </form>
           )}
         </div>

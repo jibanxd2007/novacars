@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { sendInquiryNotification } from '@/lib/mail';
 
 export async function GET() {
   try {
@@ -65,6 +66,33 @@ export async function POST(request: NextRequest) {
         status: 'requested',
       },
     });
+
+    // Lookup vehicle info if available
+    let vehicle = null;
+    if (vehicleId) {
+      try {
+        vehicle = await prisma.vehicle.findUnique({
+          where: { id: vehicleId },
+          select: { make: true, model: true, year: true, stockNumber: true, price: true },
+        });
+      } catch (e) {
+        console.error('Vehicle lookup error for email:', e);
+      }
+    }
+
+    // Dispatch email notification to support@novaauto.co.nz
+    sendInquiryNotification({
+      type: 'Test Drive Request',
+      customerName: testDrive.customerName,
+      customerEmail: testDrive.email,
+      customerPhone: testDrive.phone,
+      message: testDrive.message,
+      vehicleDetails: vehicle || undefined,
+      extraDetails: {
+        'Requested Date': testDrive.date,
+        'Requested Time': testDrive.time,
+      },
+    }).catch((e) => console.error('Failed to dispatch test drive notification:', e));
 
     return NextResponse.json(testDrive, { status: 201 });
   } catch (error: any) {
