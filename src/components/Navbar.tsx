@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Search } from 'lucide-react';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -74,14 +74,15 @@ export default function Navbar() {
             {/* Desktop Right CTA */}
             <div className="hidden md:flex items-center gap-5">
               <Link
-                href="/admin"
-                className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors tracking-wider uppercase font-medium"
+                href="/cars"
+                className="text-zinc-400 hover:text-white transition-colors"
+                title="Search Inventory"
               >
-                Portal
+                <Search className="w-4 h-4" />
               </Link>
               <Link
                 href="/cars"
-                className="px-5 py-2.5 rounded-lg bg-white text-black hover:bg-[#f4d410] hover:text-black font-semibold text-xs tracking-wider uppercase transition-all duration-200 flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 rounded-full bg-[#f4d410] text-black hover:bg-[#fae033] font-bold text-[11px] tracking-wider uppercase transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-[#f4d410]/20"
               >
                 <span>Explore Cars</span>
                 <ArrowRight className="w-3.5 h-3.5" />
