@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 
-export const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'support@novaauto.co.nz';
+export const SALES_EMAIL = process.env.SALES_EMAIL || process.env.ADMIN_NOTIFICATION_EMAIL || 'sales@novaauto.co.nz';
+export const ADMIN_EMAIL = SALES_EMAIL;
+
 
 // Create transporter if SMTP environment variables are configured
 function getTransporter() {
@@ -128,7 +130,7 @@ export async function sendInquiryNotification(payload: InquiryNotificationPayloa
 
     <!-- Footer -->
     <div style="background-color: #0c0c0f; padding: 18px 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: #71717a;">
-      This notification was automatically dispatched to <strong>${ADMIN_EMAIL}</strong>.<br/>
+      This notification was automatically dispatched to <strong>${SALES_EMAIL}</strong>.<br/>
       Nova Cars Auckland &bull; 104 Great North Road, Grey Lynn
     </div>
   </div>
@@ -145,7 +147,7 @@ Phone: ${customerPhone}
 Vehicle: ${vehicleSummary}
 ${message ? `\nMessage:\n${message}\n` : ''}
 Admin Portal: ${siteUrl}/admin
-Notification sent to: ${ADMIN_EMAIL}
+Notification sent to: ${SALES_EMAIL}
   `.trim();
 
   const transporter = getTransporter();
@@ -153,22 +155,22 @@ Notification sent to: ${ADMIN_EMAIL}
   if (transporter) {
     try {
       await transporter.sendMail({
-        from: `"Nova Cars Website" <${process.env.SMTP_FROM || ADMIN_EMAIL}>`,
-        to: ADMIN_EMAIL,
+        from: `"Nova Cars Website" <${process.env.SMTP_FROM || SALES_EMAIL}>`,
+        to: SALES_EMAIL,
         replyTo: customerEmail,
         subject,
         text: textContent,
         html: htmlContent,
       });
-      console.log(`[EMAIL DISPATCHED] Successfully sent notification to ${ADMIN_EMAIL}`);
+      console.log(`[EMAIL DISPATCHED] Successfully sent notification to ${SALES_EMAIL}`);
       return true;
     } catch (err: any) {
-      console.error(`[EMAIL ERROR] Failed sending to ${ADMIN_EMAIL}:`, err.message);
+      console.error(`[EMAIL ERROR] Failed sending to ${SALES_EMAIL}:`, err.message);
       return false;
     }
   } else {
     // If SMTP credentials not configured in environment yet, log detailed record
-    console.log(`[INQUIRY RECORDED] New ${type} saved to DB and prepared for ${ADMIN_EMAIL}`);
+    console.log(`[INQUIRY RECORDED] New ${type} saved to DB and prepared for ${SALES_EMAIL}`);
     console.log(textContent);
     return true;
   }

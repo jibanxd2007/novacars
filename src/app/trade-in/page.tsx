@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function TradeInPage() {
   const [customerName, setCustomerName] = useState('');
@@ -20,9 +20,11 @@ export default function TradeInPage() {
   const [photoUrl, setPhotoUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setSubmitting(true);
     try {
       const res = await fetch('/api/trade-ins', {
@@ -44,11 +46,14 @@ export default function TradeInPage() {
         }),
       });
 
-      if (res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to submit appraisal request. Please try again.');
+      } else {
         setSubmitted(true);
       }
     } catch (e) {
-      console.error(e);
+      setError('Connection error occurred. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -126,7 +131,7 @@ export default function TradeInPage() {
                 Enter Details
               </h3>
               <p className="text-[11px] text-zinc-400 mt-1">
-                Submissions are sent directly to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+                Submissions are sent directly to <strong className="text-[#f4d410]">SALES@NOVAAUTO.CO.NZ</strong>.
               </p>
             </div>
 
@@ -135,11 +140,17 @@ export default function TradeInPage() {
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
                 <h4 className="text-lg font-bold text-white">Appraisal Request Submitted</h4>
                 <p className="text-xs text-zinc-400 font-light">
-                  Thank you, {customerName}. Your appraisal request has been forwarded to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our valuation director will contact you via {phone} shortly.
+                  Thank you, {customerName}. Your appraisal request has been forwarded to <strong className="text-white">SALES@NOVAAUTO.CO.NZ</strong>. Our valuation director will contact you via {phone} shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2.5 text-xs text-rose-400">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
@@ -297,15 +308,15 @@ export default function TradeInPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all"
+                  className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50"
                 >
                   {submitting ? 'Submitting...' : 'Request Valuation →'}
                 </button>
 
                 <p className="text-center text-[11px] text-zinc-500 pt-1">
                   Have appraisal questions? Email us directly at{' '}
-                  <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
-                    SUPPORT@NOVAAUTO.CO.NZ
+                  <a href="mailto:sales@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                    SALES@NOVAAUTO.CO.NZ
                   </a>
                 </p>
               </form>

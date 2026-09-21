@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Dispatch email notification to support@novaauto.co.nz
+    // Dispatch email notification to sales@novaauto.co.nz
     sendInquiryNotification({
       type: 'Finance Pre-Approval',
       customerName: application.customerName,

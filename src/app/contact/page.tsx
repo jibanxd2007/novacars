@@ -10,6 +10,7 @@ import {
   Clock,
   MessageSquare,
   CheckCircle2,
+  AlertCircle,
   Send,
   Navigation,
 } from 'lucide-react';
@@ -22,9 +23,11 @@ export default function ContactPage() {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       const res = await fetch('/api/enquiries', {
@@ -38,11 +41,14 @@ export default function ContactPage() {
           preferredContact: 'phone',
         }),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to send message. Please try again.');
+      } else {
         setSubmitted(true);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      setError('A connection error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -95,8 +101,8 @@ export default function ContactPage() {
                     <span className="text-[11px] text-zinc-500 uppercase font-bold block">
                       Email Inquiries
                     </span>
-                    <a href="mailto:support@novaauto.co.nz" className="text-white font-semibold hover:text-[#f4d410] text-sm break-all">
-                      SUPPORT@NOVAAUTO.CO.NZ
+                    <a href="mailto:sales@novaauto.co.nz" className="text-white font-semibold hover:text-[#f4d410] text-sm break-all">
+                      SALES@NOVAAUTO.CO.NZ
                     </a>
                   </div>
                 </div>
@@ -190,7 +196,7 @@ export default function ContactPage() {
                 Send a Message to Our Concierge
               </h3>
               <p className="text-xs text-zinc-400 mt-1">
-                All digital inquiries are routed directly to <strong className="text-white font-mono">SUPPORT@NOVAAUTO.CO.NZ</strong> and our dealer management desk. We respond within 60 minutes.
+                All digital inquiries are routed directly to <strong className="text-white font-mono">SALES@NOVAAUTO.CO.NZ</strong> and our dealer management desk. We respond within 60 minutes.
               </p>
             </div>
 
@@ -201,7 +207,7 @@ export default function ContactPage() {
                   Message Transmitted!
                 </h4>
                 <p className="text-xs text-zinc-300 max-w-md mx-auto">
-                  Thank you, {name}. Your inquiry details have been forwarded to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong> and logged in our management portal. We will be in touch shortly.
+                  Thank you, {name}. Your inquiry details have been forwarded to <strong className="text-[#f4d410]">SALES@NOVAAUTO.CO.NZ</strong> and logged in our management portal. We will be in touch shortly.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -212,6 +218,12 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2.5 text-xs text-rose-400">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-[11px] font-semibold text-zinc-400 uppercase block mb-1">

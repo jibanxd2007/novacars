@@ -27,10 +27,10 @@ export default function Footer() {
               <p className="text-xs font-mono">
                 <span className="text-zinc-500">Contact: </span>
                 <a
-                  href="mailto:support@novaauto.co.nz"
+                  href="mailto:sales@novaauto.co.nz"
                   className="text-zinc-300 hover:text-[#f4d410] font-semibold transition-colors"
                 >
-                  SUPPORT@NOVAAUTO.CO.NZ
+                  SALES@NOVAAUTO.CO.NZ
                 </a>
               </p>
             </div>

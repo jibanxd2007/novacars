@@ -9,7 +9,7 @@ export default function AdminSettingsPage() {
     hero_title: 'Drive Your Next Chapter',
     hero_subtitle: 'Premium cars. Verified quality. Unmatched service. Your dream ride is just a click away.',
     phone: '+64 9 888 4321',
-    email: 'support@novaauto.co.nz',
+    email: 'sales@novaauto.co.nz',
     whatsapp: '+64218884321',
     address: '104 Great North Road, Grey Lynn, Auckland 1021',
     opening_hours: 'Mon - Fri: 8:30 AM – 6:00 PM | Sat: 9:00 AM – 5:00 PM | Sun: By Appointment',

@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Dispatch email notification to support@novaauto.co.nz
+    // Dispatch email notification to sales@novaauto.co.nz
     sendInquiryNotification({
       type: vehicleId ? 'Vehicle Inquiry' : 'General Contact',
       customerName: enquiry.customerName,

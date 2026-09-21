@@ -1,18 +1,26 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seeding Nova Cars database...');
 
-  // 1. Create Default Admin User
+  // 1. Create Default Admin User (hashed with bcrypt)
+  const defaultAdminPass = process.env.ADMIN_INITIAL_PASSWORD || 'Nova#NZ2026!VaultAdminPass';
+  const hashedAdminPassword = await bcrypt.hash(defaultAdminPass, 12);
+
   await prisma.user.upsert({
-    where: { email: 'support@novaauto.co.nz' },
-    update: {},
+    where: { email: 'admin@novaauto.co.nz' },
+    update: {
+      password: hashedAdminPassword,
+      name: 'Nova Auto Administrator',
+      role: 'admin',
+    },
     create: {
-      name: 'Nova Auto Support Admin',
-      email: 'support@novaauto.co.nz',
-      password: 'admin', // Simple default demo password
+      name: 'Nova Auto Administrator',
+      email: 'admin@novaauto.co.nz',
+      password: hashedAdminPassword,
       role: 'admin',
     },
   });
@@ -24,7 +32,7 @@ async function main() {
     { key: 'hero_title', value: 'Drive Your Next Chapter' },
     { key: 'hero_subtitle', value: 'Premium cars. Verified quality. Unmatched service. Your dream ride is just a click away.' },
     { key: 'phone', value: '+64 9 888 4321' },
-    { key: 'email', value: 'support@novaauto.co.nz' },
+    { key: 'email', value: 'sales@novaauto.co.nz' },
     { key: 'whatsapp', value: '+64218884321' },
     { key: 'address', value: '104 Great North Road, Ponsonby, Auckland 1021' },
     { key: 'opening_hours', value: 'Mon - Fri: 8:30 AM – 6:00 PM | Sat: 9:00 AM – 5:00 PM | Sun: By Appointment' },

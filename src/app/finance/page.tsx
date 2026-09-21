@@ -4,7 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react';
 
 function FinanceContent() {
   const searchParams = useSearchParams();
@@ -25,6 +25,7 @@ function FinanceContent() {
   const [employment, setEmployment] = useState('Full-Time Employed');
   const [applied, setApplied] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const loanAmount = Math.max(0, price - deposit);
   const monthlyRate = interestRate / 100 / 12;
@@ -36,6 +37,7 @@ function FinanceContent() {
 
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       const res = await fetch('/api/finance', {
@@ -54,11 +56,14 @@ function FinanceContent() {
           employmentStatus: employment,
         }),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to submit application. Please try again.');
+      } else {
         setApplied(true);
       }
     } catch (err) {
-      console.error(err);
+      setError('Connection error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -198,7 +203,7 @@ function FinanceContent() {
               Apply in Under 2 Minutes
             </h2>
             <p className="text-[11px] text-zinc-400 mt-1">
-              Applications are reviewed securely and sent directly to <strong className="text-[#f4d410]">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+              Applications are reviewed securely and sent directly to <strong className="text-[#f4d410]">SALES@NOVAAUTO.CO.NZ</strong>.
             </p>
           </div>
 
@@ -207,11 +212,17 @@ function FinanceContent() {
               <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
               <h3 className="text-lg font-bold text-white">Application Received</h3>
               <p className="text-xs text-zinc-400 font-light">
-                Application logged and dispatched to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our finance director will review your pre-qualification and reach out shortly.
+                Application logged and dispatched to <strong className="text-white">SALES@NOVAAUTO.CO.NZ</strong>. Our finance director will review your pre-qualification and reach out shortly.
               </p>
             </div>
           ) : (
             <form onSubmit={handleApply} className="space-y-4">
+              {error && (
+                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2.5 text-xs text-rose-400">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
               <div>
                 <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
                   Full Legal Name *
@@ -273,15 +284,15 @@ function FinanceContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all"
+                className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50"
               >
                 {loading ? 'Processing...' : 'Submit Application →'}
               </button>
 
               <p className="text-center text-[11px] text-zinc-500 pt-1">
                 Prefer bespoke terms or direct assistance? Contact{' '}
-                <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
-                  SUPPORT@NOVAAUTO.CO.NZ
+                <a href="mailto:sales@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                  SALES@NOVAAUTO.CO.NZ
                 </a>
               </p>
             </form>

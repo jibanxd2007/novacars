@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Calendar,
   CheckCircle2,
+  AlertCircle,
   ChevronLeft,
   ChevronRight,
   Maximize2,
@@ -70,6 +71,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
   const [enquiryMessage, setEnquiryMessage] = useState('');
   const [enquirySubmitted, setEnquirySubmitted] = useState(false);
   const [enquiryLoading, setEnquiryLoading] = useState(false);
+  const [enquiryError, setEnquiryError] = useState('');
 
   // Test Drive Modal State
   const [testDriveOpen, setTestDriveOpen] = useState(false);
@@ -79,6 +81,8 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
   const [tdDate, setTdDate] = useState('');
   const [tdTime, setTdTime] = useState('10:00 AM');
   const [tdSubmitted, setTdSubmitted] = useState(false);
+  const [tdLoading, setTdLoading] = useState(false);
+  const [tdError, setTdError] = useState('');
 
   // Finance Calculator State
   const [deposit, setDeposit] = useState(15000);
@@ -111,30 +115,27 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
   }, [slug]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#070709] text-white flex flex-col justify-center items-center">
-        <div className="w-8 h-8 border-2 border-white/20 border-t-[#f4d410] rounded-full animate-spin" />
-        <span className="mt-4 text-xs font-mono text-zinc-500 uppercase tracking-widest">
-          Loading Vehicle Details...
-        </span>
-      </div>
-    );
+    return <NovaLoader text="Loading Vehicle Details..." subtext="Accessing Showroom Record" />;
   }
 
   if (!vehicle) {
     return (
-      <div className="min-h-screen bg-[#070709] text-white flex flex-col justify-center items-center px-4">
+      <div className="min-h-screen bg-[#070709] text-white flex flex-col selection:bg-[#f4d410] selection:text-black">
         <Navbar />
-        <h1 className="text-2xl font-light font-['Outfit']">Vehicle Not Found</h1>
-        <p className="text-zinc-500 mt-2 text-xs">
-          This vehicle is no longer in active showroom inventory.
-        </p>
-        <Link
-          href="/cars"
-          className="mt-6 px-6 py-2.5 rounded-lg bg-white text-black font-bold text-xs uppercase tracking-wider"
-        >
-          View All Inventory
-        </Link>
+        <main className="flex-1 flex items-center justify-center p-6 text-center">
+          <div className="space-y-4 max-w-md">
+            <h1 className="text-2xl font-light font-['Outfit']">Vehicle Not Found</h1>
+            <p className="text-zinc-500 text-xs">
+              This vehicle is no longer in active showroom inventory.
+            </p>
+            <Link
+              href="/cars"
+              className="inline-block px-6 py-2.5 rounded-lg bg-white text-black font-bold text-xs uppercase tracking-wider"
+            >
+              View All Inventory
+            </Link>
+          </div>
+        </main>
         <Footer />
       </div>
     );
@@ -155,6 +156,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
 
   const handleEnquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setEnquiryError('');
     setEnquiryLoading(true);
     try {
       const res = await fetch('/api/enquiries', {
@@ -169,11 +171,14 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
           preferredContact: 'phone',
         }),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setEnquiryError(data.error || 'Failed to submit enquiry. Please try again.');
+      } else {
         setEnquirySubmitted(true);
       }
     } catch (e) {
-      console.error(e);
+      setEnquiryError('Connection error occurred. Please try again.');
     } finally {
       setEnquiryLoading(false);
     }
@@ -181,6 +186,8 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
 
   const handleTestDriveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTdError('');
+    setTdLoading(true);
     try {
       const res = await fetch('/api/test-drives', {
         method: 'POST',
@@ -195,11 +202,16 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
           message: `Private viewing requested for ${vehicle.year} ${vehicle.make} ${vehicle.model}`,
         }),
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setTdError(data.error || 'Failed to schedule test drive. Please try again.');
+      } else {
         setTdSubmitted(true);
       }
     } catch (e) {
-      console.error(e);
+      setTdError('Connection error occurred. Please try again.');
+    } finally {
+      setTdLoading(false);
     }
   };
 
@@ -563,7 +575,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
               Direct Showroom Inquiry
             </h2>
             <p className="text-xs text-zinc-400 font-light mt-1">
-              Inquiries are dispatched directly to <a href="mailto:support@novaauto.co.nz" className="text-[#f4d410] font-medium hover:underline">SUPPORT@NOVAAUTO.CO.NZ</a>. Our client specialist will respond within 60 minutes.
+              Inquiries are dispatched directly to <a href="mailto:sales@novaauto.co.nz" className="text-[#f4d410] font-medium hover:underline">SALES@NOVAAUTO.CO.NZ</a>. Our client specialist will respond within 60 minutes.
             </p>
           </div>
 
@@ -573,11 +585,17 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h4 className="text-lg font-bold text-white font-['Outfit']">Enquiry Received</h4>
                 <p className="text-xs text-zinc-400 font-light">
-                  Thank you, {enquiryName}. Your details have been sent to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>. Our concierge will be in touch shortly.
+                  Thank you, {enquiryName}. Your details have been sent to <strong className="text-white">SALES@NOVAAUTO.CO.NZ</strong>. Our concierge will be in touch shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleEnquirySubmit} className="space-y-4">
+                {enquiryError && (
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-400">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{enquiryError}</span>
+                  </div>
+                )}
                 <div>
                   <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
                     Your Name *
@@ -615,7 +633,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                       required
                       value={enquiryEmail}
                       onChange={(e) => setEnquiryEmail(e.target.value)}
-                      placeholder="Email"
+                      placeholder="you@email.com"
                       className="w-full bg-[#141419] border border-white/[0.08] rounded-lg p-2.5 text-xs text-white focus:outline-none"
                     />
                   </div>
@@ -623,7 +641,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
 
                 <div>
                   <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 block mb-1">
-                    Message
+                    Message / Question
                   </label>
                   <textarea
                     rows={3}
@@ -637,15 +655,15 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 <button
                   type="submit"
                   disabled={enquiryLoading}
-                  className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <span>{enquiryLoading ? 'Sending...' : 'Send Enquiry →'}</span>
                 </button>
 
                 <p className="text-center text-[11px] text-zinc-500 pt-1">
                   Or write to us directly at{' '}
-                  <a href="mailto:support@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
-                    SUPPORT@NOVAAUTO.CO.NZ
+                  <a href="mailto:sales@novaauto.co.nz" className="text-zinc-300 hover:text-[#f4d410] underline">
+                    SALES@NOVAAUTO.CO.NZ
                   </a>
                 </p>
               </form>
@@ -727,7 +745,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h3 className="text-lg font-bold text-white font-['Outfit']">Test Drive Booked</h3>
                 <p className="text-xs text-zinc-400">
-                  We look forward to hosting you for the {vehicle.year} {vehicle.make} {vehicle.model}. Request dispatched to <strong className="text-white">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+                  We look forward to hosting you for the {vehicle.year} {vehicle.make} {vehicle.model}. Request dispatched to <strong className="text-white">SALES@NOVAAUTO.CO.NZ</strong>.
                 </p>
                 <button
                   onClick={() => {
@@ -749,9 +767,16 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                     Schedule Test Drive
                   </h3>
                   <p className="text-[11px] text-zinc-400 mt-0.5">
-                    Requests are routed immediately to <strong className="text-zinc-200">SUPPORT@NOVAAUTO.CO.NZ</strong>.
+                    Requests are routed immediately to <strong className="text-zinc-200">SALES@NOVAAUTO.CO.NZ</strong>.
                   </p>
                 </div>
+
+                {tdError && (
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-400">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{tdError}</span>
+                  </div>
+                )}
 
                 <div>
                   <label className="text-[10px] uppercase font-mono text-zinc-400 block mb-1">Name *</label>
@@ -814,9 +839,10 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all"
+                  disabled={tdLoading}
+                  className="w-full py-3 rounded-lg bg-white hover:bg-[#f4d410] text-black font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50"
                 >
-                  Confirm Appointment
+                  {tdLoading ? 'Scheduling...' : 'Confirm Appointment'}
                 </button>
               </form>
             )}
