@@ -41,7 +41,7 @@ export interface InquiryNotificationPayload {
 
 export async function sendInquiryNotification(payload: InquiryNotificationPayload): Promise<boolean> {
   const { type, customerName, customerEmail, customerPhone, message, vehicleDetails, extraDetails } = payload;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novacars.co.nz';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://novaauto.co.nz';
 
   const subject = `[NOVA CARS] New ${type} from ${customerName}`;
 

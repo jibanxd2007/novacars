@@ -51,8 +51,8 @@ export default async function HomePage() {
     '@context': 'https://schema.org',
     '@type': 'AutoDealer',
     name: 'NOVA CARS',
-    image: 'https://novacars.co.nz/logo.png',
-    url: 'https://novacars.co.nz',
+    image: 'https://novaauto.co.nz/logo.png',
+    url: 'https://novaauto.co.nz',
     telephone: '+64 9 888 4321',
     priceRange: '$$$$',
     address: {
