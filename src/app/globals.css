@@ -92,3 +92,135 @@ body {
 .nova-progress-sweep {
   animation: nova-sweep 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
+
+/* ============================================================
+   ADMIN LIGHT MODE SYSTEM
+   ============================================================ */
+.admin-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.admin-light aside,
+.admin-light header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.admin-light main {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Cards & Surfaces */
+.admin-light [class*="bg-[#0c0c0f]"],
+.admin-light [class*="bg-[#08080a]"],
+.admin-light [class*="bg-[#0e0e13]"],
+.admin-light [class*="bg-[#0f0f14]"],
+.admin-light [class*="bg-[#0f0f13]"],
+.admin-light [class*="bg-[#121217]"],
+.admin-light [class*="bg-[#141419]"],
+.admin-light [class*="bg-zinc-950"],
+.admin-light [class*="bg-zinc-900"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.admin-light [class*="bg-[#1a1a24]"],
+.admin-light [class*="bg-white/5"],
+.admin-light [class*="bg-white/[0.03]"],
+.admin-light [class*="bg-white/[0.04]"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.admin-light [class*="bg-white/10"] {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Borders */
+.admin-light [class*="border-white"] {
+  border-color: #e2e8f0 !important;
+}
+
+.admin-light [class*="divide-white"] > * + * {
+  border-color: #e2e8f0 !important;
+}
+
+/* Typography Overrides */
+.admin-light [class*="text-white"] {
+  color: #0f172a !important;
+}
+
+.admin-light [class*="text-zinc-300"],
+.admin-light [class*="text-zinc-400"] {
+  color: #475569 !important;
+}
+
+.admin-light [class*="text-zinc-500"] {
+  color: #64748b !important;
+}
+
+.admin-light [class*="text-zinc-600"] {
+  color: #94a3b8 !important;
+}
+
+/* Inputs, Selects, and Textareas */
+.admin-light input,
+.admin-light select,
+.admin-light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.admin-light input::placeholder,
+.admin-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.admin-light input:focus,
+.admin-light select:focus,
+.admin-light textarea:focus {
+  border-color: #f4d410 !important;
+  outline: none;
+}
+
+/* Tables */
+.admin-light table thead th {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+
+.admin-light table tbody tr {
+  border-color: #f1f5f9 !important;
+  background-color: #ffffff !important;
+}
+
+.admin-light table tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Sidebar Links */
+.admin-light aside nav a:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Custom Scrollbars for light mode */
+.admin-light ::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.admin-light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.admin-light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
