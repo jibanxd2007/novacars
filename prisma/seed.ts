@@ -7,7 +7,7 @@ async function main() {
   console.log('Seeding Nova Cars database...');
 
   // 1. Create Default Admin User (hashed with bcrypt)
-  const defaultAdminPass = process.env.ADMIN_INITIAL_PASSWORD || 'Nova#NZ2026!VaultAdminPass';
+  const defaultAdminPass = process.env.ADMIN_INITIAL_PASSWORD || 'NovaCars#2026!Admin';
   const hashedAdminPassword = await bcrypt.hash(defaultAdminPass, 12);
 
   await prisma.user.upsert({

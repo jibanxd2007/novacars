@@ -9,10 +9,9 @@ Build a production-grade, full-stack automotive dealership web platform for **NO
 > [!IMPORTANT]
 > **Database Architecture**: We will use **Prisma ORM with SQLite** for local execution. This guarantees zero configuration, instant migrations, fully typed models, high performance, and complete portability without needing an external PostgreSQL or Docker instance running. The schema and queries are completely standard SQL and can be swapped to PostgreSQL in one line if deployed to production.
 > 
-> **Admin Credentials**: Default credentials will be pre-configured:
-> - Email: `admin@novacars.com`
-> - Password: `admin` (or any custom one you specify)
-> - Quick "Demo Admin Login" button provided on the login page for instant access during testing.
+> **Admin Credentials**: Default credentials configured:
+> - Email: `admin@novaauto.co.nz`
+> - Password: `NovaCars#2026!Admin`
 
 ---
 

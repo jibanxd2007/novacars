@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, CheckCircle2, Globe, Phone, Share2, Sparkles } from 'lucide-react';
+import { Settings, Save, CheckCircle2, Globe, Phone, Share2, Sparkles, ShieldCheck, Key, Lock, AlertCircle } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<any>({
@@ -22,6 +22,58 @@ export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Admin Password Management State
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passSaving, setPassSaving] = useState(false);
+  const [passError, setPassError] = useState('');
+  const [passSuccess, setPassSuccess] = useState('');
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPassError('');
+    setPassSuccess('');
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPassError('Please fill in all password fields');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPassError('New passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setPassError('New password must be at least 8 characters long');
+      return;
+    }
+
+    setPassSaving(true);
+    try {
+      const res = await fetch('/api/auth/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPassError(data.error || 'Failed to update password');
+      } else {
+        setPassSuccess('Admin password successfully updated!');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setTimeout(() => setPassSuccess(''), 5000);
+      }
+    } catch (err: any) {
+      setPassError('Connection error occurred while updating password');
+    } finally {
+      setPassSaving(false);
+    }
+  };
 
   useEffect(() => {
     async function loadSettings() {
@@ -256,6 +308,112 @@ export default function AdminSettingsPage() {
           </button>
         </div>
       </form>
+
+      {/* Admin Account Security & Password Management */}
+      <div className="bg-[#111114] border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
+        <div className="flex items-center justify-between border-b border-white/5 pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#f4d410]/10 border border-[#f4d410]/20 flex items-center justify-center">
+              <ShieldCheck className="w-5 h-5 text-[#f4d410]" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-white font-['Outfit']">
+                Admin Security & Password
+              </h2>
+              <p className="text-xs text-zinc-400">
+                Manage your credentials for the dealership admin management portal
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2.5 py-1 rounded-full uppercase tracking-wider">
+            Protected
+          </span>
+        </div>
+
+        {passError && (
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center gap-2.5 text-xs text-rose-400">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{passError}</span>
+          </div>
+        )}
+
+        {passSuccess && (
+          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2.5 text-xs text-emerald-400">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{passSuccess}</span>
+          </div>
+        )}
+
+        <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="text-xs font-semibold text-zinc-400 block mb-1">
+                Current Password
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  required
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Enter current password"
+                  className="w-full bg-[#0c0c0f] border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:outline-none focus:border-[#f4d410]"
+                />
+                <Lock className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-zinc-400 block mb-1">
+                New Password
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  required
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Min. 8 characters"
+                  className="w-full bg-[#0c0c0f] border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:outline-none focus:border-[#f4d410]"
+                />
+                <Key className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-zinc-400 block mb-1">
+                Confirm New Password
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Re-type new password"
+                  className="w-full bg-[#0c0c0f] border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:outline-none focus:border-[#f4d410]"
+                />
+                <Key className="w-4 h-4 text-zinc-500 absolute left-3 top-3" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-2 gap-3">
+            <p className="text-[11px] text-zinc-500">
+              Active Admin Login Email: <span className="text-zinc-300 font-mono">admin@novaauto.co.nz</span>
+            </p>
+
+            <button
+              type="submit"
+              disabled={passSaving}
+              className="px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs tracking-wider uppercase transition-all border border-white/10 flex items-center justify-center gap-2 self-start sm:self-auto disabled:opacity-50"
+            >
+              <Key className="w-3.5 h-3.5 text-[#f4d410]" />
+              <span>{passSaving ? 'Updating...' : 'Update Admin Password'}</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
