@@ -13,7 +13,11 @@ import {
   AlertCircle,
   Send,
   Navigation,
+  ExternalLink,
 } from 'lucide-react';
+
+const GOOGLE_MAPS_URL =
+  'https://www.google.com/maps?sca_esv=99fa615e217dff4e&rlz=1C1GCEA_enNZ1144NZ1145&output=search&q=298+great+south+road+manurewa&source=lnms&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8cTs4PJElQ4Z4ROUfAdKhH1pgN3jaVPpJtZ8IN28B_o1lYqtnDALglqDPRhVL6HplIgTemOWjx2ojgLHIc4xg2qpTj8SlxDMUFw13IP8E1ULiEBuyZMl77DANXvv0NhZ9PWApk9obY8QMT6KWXfW151Jm32YAGV4ysQ0jIeaDEuJkslkiVZ_4PZl44HWRh62tiBJNsKQ&entry=mc&ved=1t:200715&ictx=111';
 
 export default function ContactPage() {
   const [name, setName] = useState('');
@@ -113,9 +117,14 @@ export default function ContactPage() {
                     <span className="text-[11px] text-zinc-500 uppercase font-bold block">
                       Showroom Address
                     </span>
-                    <span className="text-white font-semibold">
-                      104 Great North Road, Grey Lynn, Auckland 1021
-                    </span>
+                    <a
+                      href={GOOGLE_MAPS_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-white font-semibold hover:text-[#f4d410] transition-colors"
+                    >
+                      298B Great South Road, Manurewa, Auckland
+                    </a>
                   </div>
                 </div>
 
@@ -152,36 +161,51 @@ export default function ContactPage() {
 
             {/* Interactive Location Card */}
             <div className="bg-[#111114] border border-white/10 rounded-3xl p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-white font-bold text-sm">Grey Lynn Flagship Location</h4>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-white font-bold text-sm">Manurewa Showroom Location</h4>
+                  <p className="text-[11px] text-zinc-400">298B Great South Road, Manurewa, Auckland</p>
+                </div>
                 <a
-                  href="https://maps.google.com"
+                  href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs text-[#f4d410] hover:underline flex items-center gap-1"
+                  className="text-xs text-[#f4d410] hover:text-[#fde047] flex items-center gap-1.5 font-semibold py-1.5 px-3 rounded-lg bg-[#f4d410]/10 border border-[#f4d410]/20 hover:border-[#f4d410]/40 transition-all shrink-0"
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  Get Directions
+                  <span>Get Directions</span>
                 </a>
               </div>
-              <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-900 relative flex items-center justify-center border border-white/5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=800&q=80"
-                  alt="Nova Cars Location Map"
-                  className="w-full h-full object-cover opacity-60"
+
+              {/* Live Interactive Google Map */}
+              <div className="w-full h-80 rounded-2xl overflow-hidden bg-zinc-900 relative border border-white/10 shadow-lg">
+                <iframe
+                  title="Nova Cars - 298 Great South Road, Manurewa, Auckland"
+                  src="https://maps.google.com/maps?q=298+great+south+road+manurewa&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
                 />
-                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center p-4">
-                  <div className="w-10 h-10 rounded-full bg-[#f4d410] text-black flex items-center justify-center shadow-lg">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <span className="mt-2 text-white font-bold text-xs font-['Outfit']">
-                    NOVA CARS SHOWROOM
-                  </span>
-                  <span className="text-[10px] text-zinc-300">
-                    Complimentary Valet Parking Available
-                  </span>
-                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-zinc-400 pt-1">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#f4d410] shrink-0" />
+                  Complimentary customer parking on-site
+                </span>
+                <a
+                  href={GOOGLE_MAPS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-white hover:text-[#f4d410] font-medium transition-colors"
+                >
+                  <span>Open in Google Maps</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
           </div>

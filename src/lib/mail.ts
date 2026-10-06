@@ -131,7 +131,7 @@ export async function sendInquiryNotification(payload: InquiryNotificationPayloa
     <!-- Footer -->
     <div style="background-color: #0c0c0f; padding: 18px 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: #71717a;">
       This notification was automatically dispatched to <strong>${SALES_EMAIL}</strong>.<br/>
-      Nova Cars Auckland &bull; 104 Great North Road, Grey Lynn
+      Nova Cars Auckland &bull; 298B Great South Road, Manurewa, Auckland
     </div>
   </div>
 </body>

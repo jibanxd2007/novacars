@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FileText, Download } from 'lucide-react';
+import { FileText, Download, MapPin, Phone } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -21,6 +21,25 @@ export default function Footer() {
             <p className="text-xs text-zinc-400 font-light max-w-xs leading-relaxed">
               Premium vehicles. Trusted by enthusiasts.
             </p>
+            <div className="pt-1 text-xs text-zinc-400 space-y-1.5">
+              <p className="flex items-start gap-2">
+                <MapPin className="w-3.5 h-3.5 text-[#f4d410] shrink-0 mt-0.5" />
+                <a
+                  href="https://www.google.com/maps?sca_esv=99fa615e217dff4e&rlz=1C1GCEA_enNZ1144NZ1145&output=search&q=298+great+south+road+manurewa&source=lnms&fbs=ABfTbFVyMZGZf1hfvX9uKjN_-G8cTs4PJElQ4Z4ROUfAdKhH1pgN3jaVPpJtZ8IN28B_o1lYqtnDALglqDPRhVL6HplIgTemOWjx2ojgLHIc4xg2qpTj8SlxDMUFw13IP8E1ULiEBuyZMl77DANXvv0NhZ9PWApk9obY8QMT6KWXfW151Jm32YAGV4ysQ0jIeaDEuJkslkiVZ_4PZl44HWRh62tiBJNsKQ&entry=mc&ved=1t:200715&ictx=111"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  298B Great South Road, Manurewa, Auckland
+                </a>
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="w-3.5 h-3.5 text-[#f4d410] shrink-0" />
+                <a href="tel:+6498884321" className="hover:text-white transition-colors">
+                  +64 9 888 4321
+                </a>
+              </p>
+            </div>
             <div className="flex items-center gap-4 pt-2 text-zinc-400">
               <a
                 href="https://instagram.com"

@@ -57,16 +57,16 @@ export default async function HomePage() {
     priceRange: '$$$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '104 Great North Road',
-      addressLocality: 'Grey Lynn',
+      streetAddress: '298B Great South Road',
+      addressLocality: 'Manurewa',
       addressRegion: 'Auckland',
-      postalCode: '1021',
+      postalCode: '2102',
       addressCountry: 'NZ',
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: -36.8587,
-      longitude: 174.7431,
+      latitude: -37.0232,
+      longitude: 174.8967,
     },
     openingHoursSpecification: [
       {
@@ -244,19 +244,16 @@ export default async function HomePage() {
             <div className="lg:col-span-7 relative aspect-[16/10] rounded-2xl overflow-hidden bg-zinc-950 border border-white/[0.08] shadow-2xl group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85"
-                alt="Porsche Editorial"
+                src="https://images.unsplash.com/photo-1627008119017-f89d9704a799?auto=format&fit=crop&w=1600&q=85"
+                alt="Toyota Editorial"
                 className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-8 left-8 right-8 flex items-baseline justify-between text-white">
-                <div>
-                  <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-widest block">
-                    Stuttgart Pedigree
-                  </span>
-                  <span className="text-xl font-bold font-['Outfit']">Porsche Cayenne GTS</span>
-                </div>
-                <span className="text-sm font-light text-zinc-400 font-mono">$128,500</span>
+              <div className="absolute bottom-8 left-8 right-8 text-white">
+                <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-widest block">
+                  Performance Heritage
+                </span>
+                <span className="text-xl font-bold font-['Outfit']">Toyota GR Supra</span>
               </div>
             </div>
           </div>
@@ -342,7 +339,7 @@ export default async function HomePage() {
             <span className="font-extrabold text-white">Drive Today.</span>
           </h2>
           <p className="text-sm text-zinc-400 font-light">
-            Visit our private showroom in Grey Lynn or arrange nationwide enclosed transit.
+            Visit our private showroom in Manurewa, Auckland or arrange nationwide enclosed transit.
           </p>
           <div className="pt-2">
             <Link

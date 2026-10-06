@@ -34,7 +34,7 @@ async function main() {
     { key: 'phone', value: '+64 9 888 4321' },
     { key: 'email', value: 'sales@novaauto.co.nz' },
     { key: 'whatsapp', value: '+64218884321' },
-    { key: 'address', value: '104 Great North Road, Ponsonby, Auckland 1021' },
+    { key: 'address', value: '298B Great South Road, Manurewa, Auckland' },
     { key: 'opening_hours', value: 'Mon - Fri: 8:30 AM – 6:00 PM | Sat: 9:00 AM – 5:00 PM | Sun: By Appointment' },
     { key: 'instagram', value: 'https://instagram.com/novacars' },
     { key: 'facebook', value: 'https://facebook.com/novacars' },

@@ -11,7 +11,7 @@ export default function AdminSettingsPage() {
     phone: '+64 9 888 4321',
     email: 'sales@novaauto.co.nz',
     whatsapp: '+64218884321',
-    address: '104 Great North Road, Grey Lynn, Auckland 1021',
+    address: '298B Great South Road, Manurewa, Auckland',
     opening_hours: 'Mon - Fri: 8:30 AM – 6:00 PM | Sat: 9:00 AM – 5:00 PM | Sun: By Appointment',
     instagram: 'https://instagram.com/novacars',
     facebook: 'https://facebook.com/novacars',

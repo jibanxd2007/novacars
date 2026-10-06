@@ -74,7 +74,7 @@ export default function AboutPage() {
               <div className="text-sm font-bold text-white font-['Outfit']">
                 Auckland Flagship Showroom
               </div>
-              <div className="text-xs text-zinc-400">104 Great North Road, Grey Lynn</div>
+              <div className="text-xs text-zinc-400">298B Great South Road, Manurewa, Auckland</div>
             </div>
           </div>
         </div>
