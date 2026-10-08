@@ -415,10 +415,12 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
             <div>
               <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight font-['Outfit'] leading-tight">
                 {vehicle.make} {vehicle.model}
-                <span className="block mt-1 flex items-center gap-2 text-white font-extrabold">
-                  <span className="w-1.5 h-6 bg-[#f4d410] inline-block rounded-full"></span>
-                  {vehicle.variant || 'EVO RWD'}
-                </span>
+                {vehicle.variant && (
+                  <span className="block mt-1 flex items-center gap-2 text-white font-extrabold">
+                    <span className="w-1.5 h-6 bg-[#f4d410] inline-block rounded-full"></span>
+                    {vehicle.variant}
+                  </span>
+                )}
               </h1>
               <p className="text-xs sm:text-sm text-zinc-400 mt-2 font-normal">
                 Pure performance. Unmatched elegance.
@@ -455,7 +457,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Body Style</div>
-                  <div className="text-xs font-bold text-white">{vehicle.bodyType || 'Coupe'}</div>
+                  <div className="text-xs font-bold text-white">{vehicle.bodyType || '—'}</div>
                 </div>
               </div>
 
@@ -466,7 +468,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Transmission</div>
-                  <div className="text-xs font-bold text-white">{vehicle.transmission}</div>
+                  <div className="text-xs font-bold text-white">{vehicle.transmission || '—'}</div>
                 </div>
               </div>
 
@@ -477,7 +479,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Exterior Color</div>
-                  <div className="text-xs font-bold text-white truncate max-w-[120px]">{vehicle.exteriorColor || 'Nero Noctis'}</div>
+                  <div className="text-xs font-bold text-white truncate max-w-[120px]">{vehicle.exteriorColor || '—'}</div>
                 </div>
               </div>
 
@@ -488,7 +490,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Engine</div>
-                  <div className="text-xs font-bold text-white">{vehicle.engine || 'V10 5.2L'}</div>
+                  <div className="text-xs font-bold text-white">{vehicle.engine || '—'}</div>
                 </div>
               </div>
 
@@ -499,7 +501,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Interior</div>
-                  <div className="text-xs font-bold text-white">{vehicle.interiorColor || 'Leather'}</div>
+                  <div className="text-xs font-bold text-white">{vehicle.interiorColor || '—'}</div>
                 </div>
               </div>
 
@@ -510,7 +512,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Power Output</div>
-                  <div className="text-xs font-bold text-white">{vehicle.power || '640 HP'}</div>
+                  <div className="text-xs font-bold text-white">{vehicle.power || '—'}</div>
                 </div>
               </div>
 
@@ -521,7 +523,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Stock Number</div>
-                  <div className="text-xs font-bold text-white font-mono">{vehicle.stockNumber}</div>
+                  <div className="text-xs font-bold text-white font-mono">{vehicle.stockNumber || '—'}</div>
                 </div>
               </div>
             </div>
@@ -580,7 +582,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
               </h2>
 
               <p className="text-sm text-zinc-400 leading-relaxed">
-                The {vehicle.make} {vehicle.model} {vehicle.variant || ''} combines breathtaking performance with everyday usability. With its naturally aspirated V10, precision handling and unmistakable design, it's built for those who want more than just a drive — they want an experience.
+                {vehicle.description || `The ${vehicle.make} ${vehicle.model} ${vehicle.variant || ''} combines breathtaking performance with everyday usability. Precision handling and unmistakable design, built for those who want more than just a drive — they want an experience.`}
               </p>
 
               {/* Three Performance Metrics with Yellow Line Icons */}
@@ -590,8 +592,8 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                     <Flame className="w-5 h-5 text-[#f4d410]" />
                   </div>
                   <div>
-                    <div className="text-base sm:text-lg font-bold text-white font-['Outfit']">640 HP</div>
-                    <div className="text-[11px] text-zinc-400">V10 Engine</div>
+                    <div className="text-base sm:text-lg font-bold text-white font-['Outfit']">{vehicle.power || '—'}</div>
+                    <div className="text-[11px] text-zinc-400">{vehicle.engine ? `${vehicle.engine} Engine` : 'Performance Engine'}</div>
                   </div>
                 </div>
 
@@ -625,7 +627,9 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">Breathtaking Performance</h3>
-                  <p className="text-xs text-zinc-400 mt-0.5">Naturally aspirated V10 with 640 HP.</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">
+                    {vehicle.engine ? `${vehicle.engine}${vehicle.power ? ` with ${vehicle.power}` : ''}` : 'Precision engineered performance.'}
+                  </p>
                 </div>
               </div>
 
@@ -709,191 +713,158 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ slug: 
             </button>
           </div>
 
-          {/* Grid: Left Tab Content + Right Performance Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Content Area (Col 7) */}
-            <div className="lg:col-span-7">
-              {/* TAB 1: SPECIFICATIONS TABLE */}
-              {activeTab === 'specifications' && (
-                <div className="divide-y divide-white/[0.06] text-xs">
-                  <div className="py-3 flex justify-between items-center">
+          {/* Tab Content (Full Width) */}
+          <div className="w-full">
+            {/* TAB 1: SPECIFICATIONS TABLE */}
+            {activeTab === 'specifications' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 text-xs">
+                <div className="divide-y divide-white/[0.06]">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Year</span>
                     <span className="text-white font-medium">{vehicle.year}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Transmission</span>
-                    <span className="text-white font-medium">{vehicle.transmission}</span>
+                    <span className="text-white font-medium">{vehicle.transmission || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Engine</span>
-                    <span className="text-white font-medium">{vehicle.engine || 'V10 5.2L'}</span>
+                    <span className="text-white font-medium">{vehicle.engine || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Power Output</span>
-                    <span className="text-white font-medium">{vehicle.power || '640 HP'}</span>
+                    <span className="text-white font-medium">{vehicle.power || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Body Style</span>
-                    <span className="text-white font-medium">{vehicle.bodyType || 'Coupe'}</span>
+                    <span className="text-white font-medium">{vehicle.bodyType || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                </div>
+
+                <div className="divide-y divide-white/[0.06] border-t md:border-t-0 border-white/[0.06]">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Exterior Color</span>
-                    <span className="text-white font-medium">{vehicle.exteriorColor || 'Nero Noctis (Black)'}</span>
+                    <span className="text-white font-medium">{vehicle.exteriorColor || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Interior</span>
-                    <span className="text-white font-medium">{vehicle.interiorColor || 'Leather'}</span>
+                    <span className="text-white font-medium">{vehicle.interiorColor || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Stock Number</span>
-                    <span className="text-white font-mono">{vehicle.stockNumber}</span>
+                    <span className="text-white font-mono">{vehicle.stockNumber || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Drivetrain</span>
-                    <span className="text-white font-medium">{vehicle.drivetrain || 'Rear-Wheel Drive (RWD)'}</span>
+                    <span className="text-white font-medium">{vehicle.drivetrain || '—'}</span>
                   </div>
-                  <div className="py-3 flex justify-between items-center">
+                  <div className="py-3.5 flex justify-between items-center">
                     <span className="font-bold text-zinc-400 uppercase tracking-wider">Fuel Type</span>
-                    <span className="text-white font-medium">{vehicle.fuelType || 'Petrol'}</span>
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 2: EQUIPMENT & FEATURES */}
-              {activeTab === 'features' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  {[
-                    'Naturally aspirated V10',
-                    'Iconic Lamborghini design',
-                    'Advanced AWD/RWD dynamic agility',
-                    'Premium leather interior',
-                    'Track-tested performance',
-                    'Luxury meets functionality',
-                    'Lamborghini Dynamic Steering (LDS)',
-                    'P-TCS Performance Traction Control System',
-                    'Carbon Ceramic Brakes with Giallo Calipers',
-                    '8.4-inch HMI Capacitive Multi-touch Screen',
-                    'Full LED lighting system with Y-shaped DRL',
-                    'Titanium intake valves and tuned exhaust',
-                  ].map((feat, idx) => (
-                    <div key={idx} className="flex items-center gap-2.5 p-3 rounded-lg bg-[#0e0e13] border border-white/[0.04]">
-                      <Check className="w-4 h-4 text-[#f4d410] shrink-0" />
-                      <span className="text-xs text-zinc-200">{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* TAB 3: FINANCING CALCULATOR */}
-              {activeTab === 'financing' && (
-                <div className="p-5 rounded-2xl bg-[#0e0e13] border border-white/[0.08] space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Cash Deposit Slider */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-zinc-400">Cash Deposit</span>
-                        <span className="font-bold text-white">${deposit.toLocaleString()}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="100000"
-                        max={carPrice * 0.7}
-                        step="50000"
-                        value={deposit}
-                        onChange={(e) => setDeposit(Number(e.target.value))}
-                        className="w-full accent-[#f4d410]"
-                      />
-                    </div>
-
-                    {/* Loan Term Slider */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-zinc-400">Loan Term</span>
-                        <span className="font-bold text-white">{loanTerm} months</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="12"
-                        max="72"
-                        step="12"
-                        value={loanTerm}
-                        onChange={(e) => setLoanTerm(Number(e.target.value))}
-                        className="w-full accent-[#f4d410]"
-                      />
-                    </div>
-
-                    {/* Interest Rate */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-zinc-400">Interest Rate</span>
-                        <span className="font-bold text-white">{interestRate}%</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="4.5"
-                        max="14.5"
-                        step="0.25"
-                        value={interestRate}
-                        onChange={(e) => setInterestRate(Number(e.target.value))}
-                        className="w-full accent-[#f4d410]"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Calculated Output & Apply CTA */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-white/[0.06] gap-4">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">Estimated Payment</div>
-                      <div className="text-2xl font-black text-[#f4d410] font-['Outfit']">
-                        ${Math.round(monthlyPayment).toLocaleString()}
-                        <span className="text-xs font-normal text-zinc-400 ml-1">/ month</span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setEnquiryOpen(true)}
-                      className="px-6 py-2.5 rounded-lg bg-[#f4d410] hover:bg-[#e5c70e] text-black font-extrabold text-xs uppercase tracking-wider transition-all"
-                    >
-                      Apply For Finance →
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Right Side: Visual Performance Card (Col 5) */}
-            <div className="lg:col-span-5">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl group bg-zinc-950">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=85"
-                  alt="Lamborghini V10 High Performance Wheel and Brakes"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-
-                {/* Content Overlay */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <span className="text-[11px] font-bold text-[#f4d410] uppercase tracking-widest block mb-1">
-                    — PERFORMANCE
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-white font-['Outfit'] tracking-tight">
-                    V10. 640 HP.
-                  </h3>
-                  <p className="text-xs text-zinc-300 mt-0.5">
-                    Pure power. Unfiltered.
-                  </p>
-
-                  {/* Lamborghini Shield Motif */}
-                  <div className="mt-4 flex items-center gap-2">
-                    <div className="w-8 h-9 rounded-sm border border-[#f4d410]/60 bg-black/60 flex items-center justify-center p-1 shadow-md">
-                      <svg viewBox="0 0 24 24" className="w-5 h-5 text-[#f4d410]" fill="currentColor">
-                        <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 2.18l7 2.33v4.6c0 4.54-3.14 8.78-7 9.87-3.86-1.09-7-5.33-7-9.87V6.51l7-2.33z" />
-                      </svg>
-                    </div>
+                    <span className="text-white font-medium">{vehicle.fuelType || '—'}</span>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* TAB 2: EQUIPMENT & FEATURES */}
+            {activeTab === 'features' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+                {[
+                  'Naturally aspirated V10',
+                  'Iconic Lamborghini design',
+                  'Advanced AWD/RWD dynamic agility',
+                  'Premium leather interior',
+                  'Track-tested performance',
+                  'Luxury meets functionality',
+                  'Lamborghini Dynamic Steering (LDS)',
+                  'P-TCS Performance Traction Control System',
+                  'Carbon Ceramic Brakes with Giallo Calipers',
+                  '8.4-inch HMI Capacitive Multi-touch Screen',
+                  'Full LED lighting system with Y-shaped DRL',
+                  'Titanium intake valves and tuned exhaust',
+                ].map((feat, idx) => (
+                  <div key={idx} className="flex items-center gap-2.5 p-3 rounded-lg bg-[#0e0e13] border border-white/[0.04]">
+                    <Check className="w-4 h-4 text-[#f4d410] shrink-0" />
+                    <span className="text-xs text-zinc-200">{feat}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* TAB 3: FINANCING CALCULATOR */}
+            {activeTab === 'financing' && (
+              <div className="p-5 rounded-2xl bg-[#0e0e13] border border-white/[0.08] space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {/* Cash Deposit Slider */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-1.5">
+                      <span className="text-zinc-400">Cash Deposit</span>
+                      <span className="font-bold text-white">${deposit.toLocaleString()}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="100000"
+                      max={carPrice * 0.7}
+                      step="50000"
+                      value={deposit}
+                      onChange={(e) => setDeposit(Number(e.target.value))}
+                      className="w-full accent-[#f4d410]"
+                    />
+                  </div>
+
+                  {/* Loan Term Slider */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-1.5">
+                      <span className="text-zinc-400">Loan Term</span>
+                      <span className="font-bold text-white">{loanTerm} months</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="12"
+                      max="72"
+                      step="12"
+                      value={loanTerm}
+                      onChange={(e) => setLoanTerm(Number(e.target.value))}
+                      className="w-full accent-[#f4d410]"
+                    />
+                  </div>
+
+                  {/* Interest Rate */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-1.5">
+                      <span className="text-zinc-400">Interest Rate</span>
+                      <span className="font-bold text-white">{interestRate}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="4.5"
+                      max="14.5"
+                      step="0.25"
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(Number(e.target.value))}
+                      className="w-full accent-[#f4d410]"
+                    />
+                  </div>
+                </div>
+
+                {/* Calculated Output & Apply CTA */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-white/[0.06] gap-4">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">Estimated Payment</div>
+                    <div className="text-2xl font-black text-[#f4d410] font-['Outfit']">
+                      ${Math.round(monthlyPayment).toLocaleString()}
+                      <span className="text-xs font-normal text-zinc-400 ml-1">/ month</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setEnquiryOpen(true)}
+                    className="px-6 py-2.5 rounded-lg bg-[#f4d410] hover:bg-[#e5c70e] text-black font-extrabold text-xs uppercase tracking-wider transition-all"
+                  >
+                    Apply For Finance →
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
